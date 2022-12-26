@@ -1,0 +1,20 @@
+.binus-title-green {
+    color: #10B981;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.binus-title-orange {
+    color: #F59E0B;
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 14px;
+}
+
+.binus-title-bigWhite {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 22px;
+    color: #E2E8F0;
+}

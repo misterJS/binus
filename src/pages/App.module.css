@@ -1,0 +1,73 @@
+@import url("https://use.typekit.net/kqg0pyv.css");
+
+html {
+  overflow-x: hidden;
+  margin: 0px !important;
+  min-width: auto;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  overflow-x: hidden;
+  min-width: auto;
+  margin: 0px !important;
+}
+
+.binus-app {
+  text-align: center;
+  overflow-x: hidden;
+}
+
+.binus-app__wrapper-title-content {
+  display: flex;
+  justify-content: right;
+  gap: 25%;
+}
+
+.binus-app__wrapper-event {
+  margin-top: 96px;
+  color: #fff;
+}
+
+.binus-app__wrapper-event p {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 600;
+  margin: 0px !important;
+}
+
+.binus-app__wrapper-second-event {
+  margin-top: 96px;
+  margin-right: 90px;
+  color: #fff;
+  right: 0;
+}
+
+.binus-app__wrapper-second-event p {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 600;
+  margin: 0px !important;
+}
+
+.binus-app__title-event {
+  display: flex;
+  gap: 9.61px;
+  align-items: center;
+  color: #fff;
+  justify-content: center;
+}
+
+.binus-app__title-event p {
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 600;
+}
+
+.binus-app__title-second-event {
+  display: flex;
+  gap: 21px;
+  align-items: center;
+  color: #fff;
+  justify-content: center;
+}

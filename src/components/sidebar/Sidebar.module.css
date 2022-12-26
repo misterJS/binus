@@ -1,0 +1,22 @@
+.binus-sidebar {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    border-right: 1px solid #E0E0E0;
+    color: #5E5873;
+    height: 200%;
+    min-width: 260px;
+    top: 72px;
+    align-items: center;
+}
+
+.binus-sidebar_item {
+    align-items: center;
+    height: 42px;
+}
+
+.binus-sidebar img {
+    margin: 0px 10px;
+    width: 18px;
+}
