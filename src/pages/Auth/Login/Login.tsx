@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React, { memo, useEffect } from "react"
 import {
     Container,
     Paper,
@@ -15,9 +15,11 @@ import { loginRequest } from "../../../authConfig";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Controller, useForm } from "react-hook-form";
 import { useLoginSetup } from "./Login.utils";
+import { useNavigate } from "react-router-dom";
 
 const LoginMemo = () => {
-    const { instance } = useMsal();
+    const { instance, accounts } = useMsal();
+    const navigate = useNavigate()
     const { handleLogin, handleLoginSso: handleLoginSsoThunk } = useLoginSetup();
     const loginSchema = yup.object().shape({
         email: yup.string().email().required(),
@@ -28,9 +30,8 @@ const LoginMemo = () => {
 
     const handleLoginSso = (loginType: any) => {
         if (loginType === "popup") {
-            instance.loginPopup(loginRequest).catch(e => {
-                handleLoginSsoThunk(e);
-            });
+            instance.loginPopup(loginRequest);
+            handleLoginSsoThunk(accounts);
         }
     }
 
@@ -38,8 +39,6 @@ const LoginMemo = () => {
         trigger('captcha')
         setValue('captcha', value);
     }
-
-
     return (
         <Container maxWidth="xs" sx={{ py: 20 }}>
             <Paper sx={{
@@ -137,8 +136,8 @@ const LoginMemo = () => {
                     </Box>
 
                     <Typography sx={{ textAlign: "center", my: 2 }}>
-                        Having problem with login? Try to Forgot Password
-                        or Register New Account (Non Binusian Only)
+                        Having problem with login? Try to <span style={{ color: "blue", cursor: "pointer" }} onClick={() => navigate('/forgot-password')}>Forgot Password </span>
+                        or <span style={{ color: "blue", cursor: "pointer" }} onClick={() => navigate('/register')}>Register</span> New Account (Non Binusian Only)
                     </Typography>
                 </form>
             </Paper>

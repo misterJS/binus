@@ -1,6 +1,10 @@
 import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, List, ListItem, ListItemText, Menu, MenuItem, Typography } from "@mui/material";
-import { FC, memo, ReactNode, useState } from "react"
+import { FC, memo, ReactNode, useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux";
 import { AddUserBold, LogoutBold, PasswordBold } from "../../assets/icon-apps";
+import { DialogChangePassword } from "./dialog-change-password";
+import { handleLogoutThunk } from "../../redux/authentication"
+import { useNavigate } from "react-router-dom";
 
 interface PopupUserProps {
     children: ReactNode
@@ -8,7 +12,18 @@ interface PopupUserProps {
 
 const PopupUserMemo: FC<PopupUserProps> = (props) => {
     const { children } = props
+    const navigate = useNavigate()
+    const auth = useSelector((state: any) => state.auth)
+
+    useEffect(() => {
+        if (auth?.logoutState !== '') {
+            navigate('/login')
+        }
+    }, [auth?.logoutState])
+
+    const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
     const open = Boolean(anchorEl);
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -61,13 +76,17 @@ const PopupUserMemo: FC<PopupUserProps> = (props) => {
                 <MenuItem sx={{ display: 'flex', gap: 1, flexDirection: 'row'}}>
                     <AddUserBold /> Profile
                 </MenuItem>
-                <MenuItem sx={{ display: 'flex', gap: 1, flexDirection: 'row'}}>
+                <MenuItem onClick={() => setIsOpen(true)} sx={{ display: 'flex', gap: 1, flexDirection: 'row'}}>
                     <PasswordBold /> Change Password
                 </MenuItem>
-                <MenuItem sx={{ display: 'flex', gap: 1, flexDirection: 'row'}}>
+                <MenuItem onClick={() => dispatch(handleLogoutThunk())} sx={{ display: 'flex', gap: 1, flexDirection: 'row'}}>
                     <LogoutBold /> Logout
                 </MenuItem>
             </Menu>
+            <DialogChangePassword 
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+            />
         </>
     )
 }

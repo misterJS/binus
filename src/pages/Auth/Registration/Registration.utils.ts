@@ -1,23 +1,27 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { handleLoginSsoThunk, handleLoginThunk } from "../../../redux/authentication"
+import { handleLoginSsoThunk, handleRegistrationThunk } from "../../../redux/authentication"
 
-export const useLoginSetup = () => {
+export const useRegistrationSetup = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const auth = useSelector((state: any) => state.auth)
 
     useEffect(() => {
-        if (auth.loginState?.returnValue?.id) {
-            navigate('/')
+        if (auth.loading === false) {
+            if (auth?.loginState.resultCode === 200) {
+                navigate('/')
+            }
         }
 
-    }, [auth.loginState])
+    }, [auth?.loading])
 
 
-    const handleLogin = (data: any) => {
-        dispatch(handleLoginThunk(data))
+    const handleRegister = (data: any) => {
+        console.log(data);
+
+        dispatch(handleRegistrationThunk(data))
     }
 
     const handleLoginSso = (data: any) => {
@@ -25,7 +29,7 @@ export const useLoginSetup = () => {
     }
 
     return {
-        handleLogin,
+        handleRegister,
         handleLoginSso
     }
 }

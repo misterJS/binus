@@ -21,6 +21,9 @@ import { Content } from '../components/content';
 import { AddUserBold, TwoUsersBold, WalletBold, WorkBold } from '../assets/icon-apps';
 import { LeafCurved } from '../assets/icon-sidebar';
 import { Leaderboards } from './_partials/Leaderboards';
+import { useEffect, useState } from 'react';
+import { DialogUsername } from '../components/dialog/dialog-validate-username';
+import { useSelector } from 'react-redux';
 
 const THEME = createTheme({
   typography: {
@@ -46,6 +49,15 @@ const rows = [
 ];
 
 function Dashboard() {
+  const auth = useSelector((state: any) => state.auth)
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (auth.loginSso) {
+      setIsOpen(true)
+    }
+  }, [auth.loginSso])
+
   return (
     <ThemeProvider theme={THEME}>
       <Content>
@@ -212,7 +224,7 @@ function Dashboard() {
                   <Grid container alignItems={'center'}>
                     <Grid item xs={8} sx={{ display: 'flex', flexDirection: 'column', textAlign: 'left', gap: 1 }}>
                       <Typography fontWeight={600}>
-                      Paraphrasing Psikologi
+                        Paraphrasing Psikologi
                       </Typography>
                     </Grid>
                     <Grid item xs={4} textAlign="right">
@@ -268,6 +280,10 @@ function Dashboard() {
             </Paper>
           ))}
         </Paper>
+        <DialogUsername
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
       </Content>
     </ThemeProvider>
   );

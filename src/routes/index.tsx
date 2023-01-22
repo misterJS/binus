@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom"
-import { ForgotPassword } from '../pages/Auth/ForgotPassword';
+import { ForgotPassword } from '../pages/Auth/ForgotPassword/ForgotPassword';
 import { Login } from '../pages/Auth/Login';
 import { Registration } from '../pages/Auth/Registration';
 import { Chat } from '../pages/Chat/Chat';
 import Dashboard from '../pages/Dashboard';
-import Garden from '../pages/Garden';
+import Garden from '../pages/Garden/Garden';
 import { JobDetail } from '../pages/Garden/JobDetail';
 import { Transaction } from '../pages/Transaction';
 import { Profile } from '../pages/User/Profile';
@@ -14,7 +14,7 @@ import { TransactionManagement } from "../pages/Cms";
 import { TransactionDetail } from "../pages/Cms/TransactionManagement/_partials/detail/TransactionDetail";
 import { ProjectPost } from "../pages/Transaction/_partials/ProjectPost";
 import { EditProfile } from "../pages/User/_partials/EditProfile";
-import { Confirmation } from "../pages/Auth/ConfirmationPage";
+import { Confirmation } from "../pages/Auth/ConfirmationPage/ConfirmationPage";
 
 export const AppRoutes = () => {
     return (

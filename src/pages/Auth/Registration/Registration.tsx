@@ -5,11 +5,33 @@ import {
     Typography,
     FormControl,
     Box,
-    TextField
+    TextField,
+    Button
 } from "@mui/material";
-import { Button } from "../../../components/button";
+import * as yup from 'yup'
+import { useRegistrationSetup } from "./Registration.utils";
+import { Controller, useForm } from "react-hook-form";
+import ReCAPTCHA from "react-google-recaptcha";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
 
 const RegistrationMemo = () => {
+    const { handleRegister } = useRegistrationSetup();
+    const navigate = useNavigate()
+    const registrationSchema = yup.object().shape({
+        email: yup.string().email().required(),
+        password: yup.string().required(),
+        confirmPassword: yup.string().required(),
+    })
+
+    const { handleSubmit, getValues, trigger, setValue, control, formState: { errors } } = useForm({ resolver: yupResolver(registrationSchema) })
+
+
+    const onChange = (value: any) => {
+        trigger('captcha')
+        setValue('captcha', value);
+    }
+
     return (
         <Container maxWidth="xs" sx={{ py: 20 }}>
             <Paper sx={{
@@ -18,129 +40,170 @@ const RegistrationMemo = () => {
                 boxShadow: 'none',
                 border: '1px solid #E0E0E0',
             }}>
-                <Box sx={{ display: "flex", justifyContent: "center", gap: 1, my: 2 }}>
-                    <Typography variant="h5" sx={{ textAlign: "center", my: 2, fontWeight: 700, color: "#028ED5" }}>
-                        Registration
+                <form onSubmit={handleSubmit(handleRegister)}>
+                    <Box sx={{ display: "flex", justifyContent: "center", gap: 1, my: 2 }}>
+                        <Typography variant="h5" sx={{ textAlign: "center", my: 2, fontWeight: 700, color: "#028ED5" }}>
+                            Registration
+                        </Typography>
+                    </Box>
+
+                    <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
+                        Email:
                     </Typography>
-                </Box>
+                    <FormControl sx={{ mt: 1, mb: 2 }} size="small" fullWidth>
+                        <Controller
+                            name='email'
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    placeholder='Email'
+                                    size="small"
+                                    fullWidth
+                                />
+                            )}
+                        />
+                        {errors.email && <span style={{ fontSize: '14px', color: "red" }}>{String(errors?.email?.message)}</span>}
+                    </FormControl>
 
-                <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
-                    Email:
-                </Typography>
-                <FormControl sx={{ mt: 1, mb: 2 }} size="small" fullWidth>
-                    <TextField
-                        id="email"
-                        placeholder='Email'
-                        size="small"
-                        fullWidth
+                    <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
+                        Username:
+                    </Typography>
+                    <FormControl sx={{ mt: 1, mb: 2 }} size="small" fullWidth>
+                        <Controller
+                            name='username'
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    placeholder='Username'
+                                    size="small"
+                                    fullWidth
+                                />
+                            )}
+                        />
+                    </FormControl>
+
+                    <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
+                        Phone No:
+                    </Typography>
+                    <FormControl sx={{ mt: 1, mb: 2 }} size="small" fullWidth>
+                        <Controller
+                            name='phoneNumber'
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    placeholder='Phone Number'
+                                    size="small"
+                                    fullWidth
+                                />
+                            )}
+                        />
+                    </FormControl>
+
+                    <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
+                        Full Name:
+                    </Typography>
+                    <FormControl sx={{ mt: 1, mb: 2 }} size="small" fullWidth>
+                        <Controller
+                            name='fullName'
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    placeholder='Full Name'
+                                    size="small"
+                                    fullWidth
+                                />
+                            )}
+                        />
+                    </FormControl>
+
+
+                    <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
+                        Company or University Name:
+                    </Typography>
+                    <FormControl sx={{ mt: 1, mb: 2 }} size="small" fullWidth>
+                        <Controller
+                            name='companyName'
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    placeholder='Company Name'
+                                    size="small"
+                                    fullWidth
+                                />
+                            )}
+                        />
+                    </FormControl>
+
+                    <ReCAPTCHA
+                        sitekey="6Lcsq0EjAAAAAPKftP5UemtDMBNxJ0_3eb9_lN-3"
+                        onChange={onChange}
+                        style={{ width: '100%' }}
                     />
-                </FormControl>
 
-                <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
-                    Username:
-                </Typography>
-                <FormControl sx={{ mt: 1, mb: 2 }} size="small" fullWidth>
-                    <TextField
-                        id="username"
-                        placeholder='User Name'
-                        size="small"
-                        fullWidth
-                    />
-                </FormControl>
+                    <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
+                        Password:
+                    </Typography>
+                    <FormControl sx={{ mt: 1, mb: 3 }} size="small" fullWidth>
+                        <Controller
+                            name='password'
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    placeholder='Password'
+                                    type="password"
+                                    size="small"
+                                    fullWidth
+                                />
+                            )}
+                        />
+                        {errors.password && <span style={{ fontSize: '14px', color: "red" }}>{String(errors?.password?.message)}</span>}
+                    </FormControl>
 
-                <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
-                    Phone No:
-                </Typography>
-                <FormControl sx={{ mt: 1, mb: 2 }} size="small" fullWidth>
-                    <TextField
-                        id="phone"
-                        placeholder='Phone'
-                        size="small"
-                        fullWidth
-                    />
-                </FormControl>
+                    <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
+                        Confirm Password:
+                    </Typography>
+                    <FormControl sx={{ mt: 1, mb: 3 }} size="small" fullWidth>
+                        <Controller
+                            name='confirmPassword'
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    placeholder='Confirm Password'
+                                    type="password"
+                                    size="small"
+                                    fullWidth
+                                />
+                            )}
+                        />
+                        {errors.confirmPassword && <span style={{ fontSize: '14px', color: "red" }}>{String(errors?.confirmPassword?.message)}</span>}
+                    </FormControl>
 
-                <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
-                    Full Name:
-                </Typography>
-                <FormControl sx={{ mt: 1, mb: 2 }} size="small" fullWidth>
-                    <TextField
-                        id="fullname"
-                        placeholder='Full Name'
-                        size="small"
-                        fullWidth
-                    />
-                </FormControl>
-
-
-                <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
-                    Company or University Name:
-                </Typography>
-                <FormControl sx={{ mt: 1, mb: 2 }} size="small" fullWidth>
-                    <TextField
-                        id="institution"
-                        placeholder='Institution'
-                        size="small"
-                        fullWidth
-                    />
-                </FormControl>
-
-                <img src='/photos/captca.png' alt="logo" />
-                <Typography sx={{ mt: 2 }} variant='body2' color={'#4F4F4F'} fontWeight={500}>
-                    Type the text
-                </Typography>
-                <FormControl sx={{ mt: 1, mb: 3 }} size="small" fullWidth>
-                    <TextField
-                        id="captcha"
-                        size="small"
-                        fullWidth
-                    />
-                </FormControl>
-
-                <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
-                    Password:
-                </Typography>
-                <FormControl sx={{ mt: 1, mb: 3 }} size="small" fullWidth>
-                    <TextField
-                        id="password"
-                        placeholder='Password'
-                        type="password"
-                        size="small"
-                        fullWidth
-                    />
-                </FormControl>
-
-                <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
-                    Confirm Password:
-                </Typography>
-                <FormControl sx={{ mt: 1, mb: 3 }} size="small" fullWidth>
-                    <TextField
-                        id="confirm-password"
-                        placeholder='Password'
-                        type="password"
-                        size="small"
-                        fullWidth
-                    />
-                </FormControl>
-
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <Button color="primary" variant="contained" fullwidth>
-                        <Typography
-                            sx={{ textTransform: 'none', fontWeight: 700 }}
-                            variant='body2'
-                        >
-                            Submit
-                        </Typography>
-                    </Button>
-                    <Button color="primary" variant="contained" fullwidth>
-                        <Typography
-                            sx={{ textTransform: 'none', fontWeight: 700 }}
-                            variant='body2'
-                        >
-                            Back to Login
-                        </Typography>
-                    </Button>
-                </Box>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        <Button disabled={getValues('captcha') === undefined} type="submit" color="primary" variant="contained">
+                            <Typography
+                                sx={{ textTransform: 'none', fontWeight: 700 }}
+                                variant='body2'
+                            >
+                                Submit
+                            </Typography>
+                        </Button>
+                        <Button onClick={() => navigate("/login")} color="primary" variant="contained">
+                            <Typography
+                                sx={{ textTransform: 'none', fontWeight: 700 }}
+                                variant='body2'
+                            >
+                                Back to Login
+                            </Typography>
+                        </Button>
+                    </Box>
+                </form>
             </Paper>
         </Container>
     )

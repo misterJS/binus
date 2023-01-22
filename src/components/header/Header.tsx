@@ -2,14 +2,25 @@ import { AppBar, Avatar, CssBaseline, Grid, IconButton, Toolbar, Tooltip, Typogr
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { Box, Container } from "@mui/system";
-import { FC, memo } from "react"
+import { FC, memo, useEffect } from "react"
 import { HeaderProps } from "./Header.types";
 import { PopupUser } from "../dialog/popup-user";
 import { PopupNotification } from "../dialog/popup-notification";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const HeaderMemo: FC<HeaderProps> = ({
     handleDrawerOpen
 }) => {
+    const navigate = useNavigate()
+    const auth = localStorage.getItem("token")
+
+    useEffect(() => {
+        if (!auth) {
+            navigate('/login')
+        }
+    }, [])
+
     return (
         <>
             <CssBaseline />
