@@ -14,8 +14,6 @@ const ButtonMemo = (props: IButton) => {
         color,
         style
     } = props;
-
-    console.log(color === "secondary" && variant === "contained");
     
 
     const withIconStyle = useMemo(

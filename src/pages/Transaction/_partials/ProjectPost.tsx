@@ -1,18 +1,31 @@
 import { FormControl, Grid, Paper, TextField, Typography, Box, Button } from '@mui/material'
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Content, ImageUploader } from '../../../components'
+import { DialogBalances } from '../../../components/dialog/dialog-balance'
 
 const ProjectPostMemo = () => {
+    const [open, setOpen] = useState(false)
     const postProjectSchema = yup.object().shape({
         title: yup.string().min(3).required()
     })
-    const { reset, handleSubmit, trigger, getValues, control, formState: { errors } } = useForm({ resolver: yupResolver(postProjectSchema) })
+    const { setValue, handleSubmit, trigger, getValues, control, formState: { errors } } = useForm({ resolver: yupResolver(postProjectSchema) })
     const createProject = () => {
         console.log(getValues());
     }
+
+    useEffect(() => {
+        if (getValues("pointReward") || getValues("contributorNo")) {
+            if (Number(getValues("pointReward")) * Number(getValues("contributorNo")) > 1000) {
+                setOpen(true)
+                setValue("pointReward", 0)
+                setValue("contributorNo", 0)
+            }
+        }
+
+    }, [getValues()])
 
     return (
         <Content>
@@ -219,14 +232,20 @@ const ProjectPostMemo = () => {
                                 <Typography variant='body2' color={'#4F4F4F'} fontWeight={500} sx={{ mt: 2 }}>
                                     Quote of Contributor:
                                 </Typography>
-                                <FormControl size="small" fullWidth>
-                                    <TextField
-                                        type="text"
-                                        placeholder='100'
-                                        size="small"
-                                        fullWidth
-                                    />
-                                </FormControl>
+                                <Controller
+                                    name='contributorNo'
+                                    control={control}
+                                    render={({ field }) => (
+                                        <TextField
+                                            {...field}
+                                            type="number"
+                                            onBlur={() => trigger()}
+                                            placeholder='Contributor No'
+                                            size="small"
+                                            fullWidth
+                                        />
+                                    )}
+                                />
                             </>
                         </Grid>
                         <Grid item md={6}>
@@ -234,14 +253,20 @@ const ProjectPostMemo = () => {
                                 <Typography variant='body2' color={'#4F4F4F'} fontWeight={500} sx={{ mt: 2 }}>
                                     Point Reward:
                                 </Typography>
-                                <FormControl size="small" fullWidth>
-                                    <TextField
-                                        type="text"
-                                        placeholder='1000'
-                                        size="small"
-                                        fullWidth
-                                    />
-                                </FormControl>
+                                <Controller
+                                    name='pointReward'
+                                    control={control}
+                                    render={({ field }) => (
+                                        <TextField
+                                            {...field}
+                                            onBlur={() => trigger()}
+                                            type="number"
+                                            placeholder='Point Reward'
+                                            size="small"
+                                            fullWidth
+                                        />
+                                    )}
+                                />
                             </>
                         </Grid>
                     </Grid>
@@ -310,6 +335,10 @@ const ProjectPostMemo = () => {
                     </Grid>
                 </Paper>
             </form>
+            <DialogBalances
+                isOpen={open}
+                setIsOpen={() => setOpen(!open)}
+            />
         </Content >
     )
 }

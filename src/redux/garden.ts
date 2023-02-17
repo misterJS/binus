@@ -4,12 +4,6 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import { BASE_URL } from '../utils'
 
-// const initialUser = () => {
-//   const item = window.localStorage.getItem('userData')
-//   //** Parse stored json or if none return initialValue
-//   return item ? JSON.parse(item) : {}
-// }
-
 export const getProjectList = createAsyncThunk('garden/getProjectList', async (payload: any) => {
   const params = JSON.stringify({
     "Category": "1",

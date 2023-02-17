@@ -1,4 +1,4 @@
-import { memo } from "react"
+import { memo, useEffect } from "react"
 import {
     Paper,
     Grid,
@@ -10,17 +10,18 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    Button,
 } from "@mui/material";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import BusinessCenterOutlinedIcon from '@mui/icons-material/BusinessCenterOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
-
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import { Content } from "../../components";
-import { Button } from "../../components/button";
+import { useProfile } from "./Profile.utils";
+import { useNavigate } from "react-router-dom";
 
 function createData(
     name: string,
@@ -35,6 +36,14 @@ const rows = [
 ];
 
 const ProfileMemo = () => {
+    const navigate = useNavigate()
+    const { getProfilesData, profile } = useProfile();
+    useEffect(() => {
+        if (profile.profile === null) {
+            getProfilesData()
+        }
+    }, [profile.profile])
+
     return (
         <Content>
             <Paper
@@ -68,8 +77,8 @@ const ProfileMemo = () => {
                         <Grid container columnSpacing={2}>
                             <Grid item>
                                 <img
-                                    src='/photos/people.png'
-                                    alt="user"
+                                    src={profile?.profile?.returnValue[0]?.photo}
+                                    alt="user profile"
                                     style={{ borderRadius: 6 }}
                                     width={104}
                                     height={104}
@@ -81,7 +90,7 @@ const ProfileMemo = () => {
                                         sx={{ textTransform: 'none' }}
                                         variant='body1'
                                     >
-                                        Bayu Kusumo
+                                        {profile?.profile?.returnValue[0]?.fullName}
                                     </Typography>
                                     <img src='/photos/sketch-logo.png' alt="user" height={15} />
                                 </Box>
@@ -89,9 +98,9 @@ const ProfileMemo = () => {
                                     sx={{ textTransform: 'none', mb: 2 }}
                                     variant='body2'
                                 >
-                                    bayukusmo@gmail.com
+                                    {profile?.profile?.returnValue[0]?.email}
                                 </Typography>
-                                <Button variant="contained">
+                                <Button variant="contained" onClick={() => navigate("/user/edit-profile")}>
                                     <Typography
                                         sx={{ textTransform: 'none', fontWeight: 500 }}
                                         variant='body2'
@@ -117,7 +126,7 @@ const ProfileMemo = () => {
                                 sx={{ textTransform: 'none' }}
                                 variant='body2'
                             >
-                                : 123456789
+                                : {profile?.profile?.returnValue[0]?.nim}
                             </Typography>
                         </Box>
                         <Box display="flex" sx={{ mb: 0.5 }} gap={0.5}>
@@ -151,7 +160,7 @@ const ProfileMemo = () => {
                                 sx={{ textTransform: 'none' }}
                                 variant='body2'
                             >
-                                : 2019
+                                : {profile?.profile?.returnValue[0]?.yearClass}
                             </Typography>
                         </Box>
                         <Box display="flex" sx={{ mb: 0.5 }} gap={9}>
@@ -168,7 +177,7 @@ const ProfileMemo = () => {
                                 sx={{ textTransform: 'none' }}
                                 variant='body2'
                             >
-                                : Psikologi
+                                : {profile?.profile?.returnValue[0]?.major}
                             </Typography>
                         </Box>
                     </Grid>
@@ -187,7 +196,7 @@ const ProfileMemo = () => {
                                 sx={{ textTransform: 'none' }}
                                 variant='body2'
                             >
-                                : bayu@binus.ac.id
+                                : {profile?.profile?.returnValue[0]?.email}
                             </Typography>
                         </Box>
                         <Box display="flex" sx={{ mb: 0.5 }} gap={5.6}>
@@ -204,7 +213,7 @@ const ProfileMemo = () => {
                                 sx={{ textTransform: 'none' }}
                                 variant='body2'
                             >
-                                : 082123456789
+                                : {profile?.profile?.returnValue[0]?.phoneNo}
                             </Typography>
                         </Box>
                         <Box display="flex" sx={{ mb: 0.5 }} gap={2.1}>
@@ -221,7 +230,7 @@ const ProfileMemo = () => {
                                 sx={{ textTransform: 'none' }}
                                 variant='body2'
                             >
-                                : 07 July 2022
+                                : {profile?.profile?.returnValue[0]?.memberSince}
                             </Typography>
                         </Box>
                     </Grid>

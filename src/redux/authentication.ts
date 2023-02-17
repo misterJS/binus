@@ -1,5 +1,4 @@
 // ** Redux Imports
-import { formLabelClasses } from '@mui/material'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import toast from 'react-hot-toast'
@@ -112,7 +111,7 @@ export const handleChangePassword = createAsyncThunk('auth/handleChangePassword'
     "Password": payload.password,
     "ConfirmPassword": payload.confirmPassword
   });
-  const response = await axios.post(`${BASE_URL}auth/change-password`, params, {
+  const response = await axios.post(`${BASE_URL}auth/changepasswordsubmit`, params, {
     "headers": {
       "content-type": "application/json",
       "Authorization": "Basic Nzk4ODVFODEtQzFCRi00OTkzLTlBMzUtOUQ4RDRBRUExREE3"
