@@ -1,8 +1,9 @@
-import { Box, Paper, Typography, Button, Tabs, Tab } from "@mui/material"
-import { memo, useState } from "react"
-import { Content } from "../../../components"
-import { ListRanking } from "./_partials";
+import { Box, Paper, Tab, Tabs, Typography } from "@mui/material";
+import { memo, useState } from "react";
 import { ActivityBold } from "../../../assets/icon-apps";
+import { Content } from "../../../components";
+import { useTransactionManagement } from "./TransactionManagement.utils";
+import { ListRanking } from "./_partials";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -38,10 +39,18 @@ function a11yProps(index: number) {
 }
 
 const TransactionManagementMemo = () => {
+    const [{ }, { set }] = useTransactionManagement();
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
+        if (newValue === 0) {
+            set("tab", "approval")
+        } else if (newValue === 1) {
+            set("tab", "active")
+        } else {
+            set("tab", "closed")
+        }
     };
     return (
         <>

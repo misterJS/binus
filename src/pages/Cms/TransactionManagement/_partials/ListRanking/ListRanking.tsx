@@ -1,7 +1,8 @@
-import { Box, Checkbox, Chip, IconButton, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel } from "@mui/material";
-import { memo, useState } from "react"
+import { Box, Checkbox, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel } from "@mui/material";
 import { visuallyHidden } from '@mui/utils';
-import { EditBold, InfoCircleBold } from "../../../../../assets/icon-apps";
+import { memo, useState } from "react";
+import { InfoCircleBold } from "../../../../../assets/icon-apps";
+import { useTransactionManagement } from "../../TransactionManagement.utils";
 
 
 interface Data {
@@ -187,6 +188,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 const ListRankingMemo = () =>  {
+    const [{transactionManagementList}, {}] = useTransactionManagement();
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof Data>('username');
     const [selected, setSelected] = useState<readonly string[]>([]);
@@ -249,7 +251,7 @@ const ListRankingMemo = () =>  {
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - transactionManagementList.length) : 0;
 
 
     return (
@@ -266,19 +268,19 @@ const ListRankingMemo = () =>  {
                         orderBy={orderBy}
                         onSelectAllClick={handleSelectAllClick}
                         onRequestSort={handleRequestSort}
-                        rowCount={rows.length}
+                        rowCount={transactionManagementList.length}
                     />
                     <TableBody>
-                        {stableSort(rows, getComparator(order, orderBy))
+                        {stableSort(transactionManagementList, getComparator(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row, index) => {
-                                const isItemSelected = isSelected(row.id);
+                                const isItemSelected = isSelected(String(row.id));
                                 const labelId = `enhanced-table-checkbox-${index}`;
 
                                 return (
                                     <TableRow
                                         hover
-                                        onClick={(event) => handleClick(event, row.id)}
+                                        onClick={(event) => handleClick(event, String(row.id))}
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}

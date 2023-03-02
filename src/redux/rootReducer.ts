@@ -1,5 +1,6 @@
 // ** Reducers Imports
 import auth from './authentication'
+import transactionManagement from './cms/transactionManagement'
 import garden from './garden'
 import goBuzz from './goBuzz'
 import profile from './profile'
@@ -10,7 +11,8 @@ const rootReducer = {
     garden,
     goBuzz,
     profile,
-    transaction
+    transaction,
+    transactionManagement
 }
 
 export default rootReducer
