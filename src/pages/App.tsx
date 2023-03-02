@@ -12,6 +12,11 @@ const THEME = createTheme({
   typography: {
     "fontFamily": `"montserrat", sans-serif`
   },
+palette:{
+  text: {
+    disabled: '#000'
+  },
+}
 });
 
 function App() {

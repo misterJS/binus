@@ -19,6 +19,7 @@ import {
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import { DialogMyProposal } from "../../components/dialog/dialog-my-proposal";
+import { useTransaction } from "./transaction.util";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -55,9 +56,17 @@ function a11yProps(index: number) {
 
 const TransactionMemo = () => {
     const [value, setValue] = React.useState(0);
+    const { getProjectByWorker, getProjectByClient, set, slug, projectList } = useTransaction();
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
+        if (newValue === 0) {
+            set("status", "Open Tab")
+        } else if (newValue === 1) {
+            set("status", "WorkInProgress Tab")
+        } else {
+            set("status", "Closed Tab")
+        }
     };
     return (
         <Content>
@@ -89,15 +98,15 @@ const TransactionMemo = () => {
                 </Grid>
 
                 <ButtonGroup sx={{ my: 2 }} variant="outlined" aria-label="outlined button group">
-                    <Button sx={{ backgroundColor: '#028ED5' }}>
+                    <Button sx={slug === 'client' && { backgroundColor: '#028ED5', color: '#FFF' }} onClick={getProjectByClient}>
                         <Typography
-                            sx={{ textTransform: 'none', fontWeight: 500, color: '#FFF' }}
+                            sx={{ textTransform: 'none', fontWeight: 500 }}
                             variant='body2'
                         >
                             As Client
                         </Typography>
                     </Button>
-                    <Button>
+                    <Button sx={slug === 'worker' && { backgroundColor: '#028ED5', color: '#FFF' }} onClick={getProjectByWorker}>
                         <Typography
                             sx={{ textTransform: 'none', fontWeight: 500 }}
                             variant='body2'
@@ -193,170 +202,102 @@ const TransactionMemo = () => {
                             </FormControl>
                         </Grid>
                     </Grid>
-                    <Paper
-                        sx={{
-                            p: '24px 16px',
-                            mt: 2,
-                            boxShadow: 'none',
-                            border: '1px solid #E0E0E0',
-                            borderRadius: 1,
-                        }}
-                    >
-                        <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
-                            <Grid item>
-                                <Box display="flex" columnGap={1} alignItems="center">
-                                    <img src='/icons/star.svg' alt="star" />
-                                    <Typography
-                                        fontWeight={600}
-                                        sx={{ textTransform: 'none' }}
-                                        variant='body2'
-                                    >
-                                        10.000
-                                    </Typography>
-                                    <Chip sx={{ backgroundColor: '#F9CE30', color: '#fff' }} label="Waiting Approval" />
-                                </Box>
-                            </Grid>
-                            <Grid item>
-                                <Box display="flex" columnGap={1} alignItems="center">
-                                    <DeleteOutlineOutlinedIcon />
-                                    <CreateOutlinedIcon />
-                                </Box>
-                            </Grid>
-                        </Grid>
-                        <Typography
-                            fontWeight={500}
-                            sx={{ textTransform: 'none' }}
-                            variant='body2'
+                    {projectList?.map(() =>
+                        <Paper
+                            sx={{
+                                p: '24px 16px',
+                                mt: 2,
+                                boxShadow: 'none',
+                                border: '1px solid #E0E0E0',
+                                borderRadius: 1,
+                            }}
                         >
-                            11 July 2022 - 18 July 2022
-                        </Typography>
-                        <Typography
-                            fontWeight={700}
-                            sx={{ textTransform: 'none', mt: 1 }}
-                            variant='body1'
-                        >
-                            Penelitian Psikologi Terhadap Masyarakat - Translate
-                        </Typography>
-                        <Typography
-                            fontWeight={500}
-                            sx={{ textTransform: 'none' }}
-                            variant='caption'
-                        >
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </Typography>
-                        <Box display="flex" justifyContent="space-between" sx={{ mt: 2 }}>
-                            <Box display="flex" columnGap={2} alignItems="center">
-                                <DialogMyProposal>
-                                    <Button variant="contained" size="small">
+                            <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
+                                <Grid item>
+                                    <Box display="flex" columnGap={1} alignItems="center">
+                                        <img src='/icons/star.svg' alt="star" />
                                         <Typography
                                             fontWeight={600}
-                                            color="#fff"
                                             sx={{ textTransform: 'none' }}
                                             variant='body2'
                                         >
-                                            Your Envidence
+                                            10.000
                                         </Typography>
-                                    </Button>
-                                </DialogMyProposal>
-                                <Typography
-                                    fontWeight={600}
-                                    color="#028ED5"
-                                    sx={{ textTransform: 'none' }}
-                                    variant='body2'
-                                >
-                                    Envidence submitted at  19 July 2022 18:00
-                                </Typography>
-                            </Box>
-                            <Box display="flex" columnGap={2}>
-                                <Typography
-                                    fontWeight={600}
-                                    color="#028ED5"
-                                    sx={{ textTransform: 'none', mt: 1 }}
-                                    variant='body2'
-                                >
-                                    2 Attacments
-                                </Typography>
-                                <Typography
-                                    fontWeight={600}
-                                    color="#028ED5"
-                                    sx={{ textTransform: 'none', mt: 1 }}
-                                    variant='body2'
-                                >
-                                    Open Project
-                                </Typography>
-                            </Box>
-                        </Box>
-                    </Paper>
-                    <Paper
-                        sx={{
-                            p: '24px 16px',
-                            mt: 2,
-                            boxShadow: 'none',
-                            border: '1px solid #E0E0E0',
-                            borderRadius: 1,
-                        }}
-                    >
-                        <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
-                            <Grid item>
-                                <Box display="flex" columnGap={1} alignItems="center">
-                                    <img src='/icons/star.svg' alt="star" />
+                                        <Chip sx={{ backgroundColor: '#F9CE30', color: '#fff' }} label="Waiting Approval" />
+                                    </Box>
+                                </Grid>
+                                <Grid item>
+                                    <Box display="flex" columnGap={1} alignItems="center">
+                                        <DeleteOutlineOutlinedIcon />
+                                        <CreateOutlinedIcon />
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                            <Typography
+                                fontWeight={500}
+                                sx={{ textTransform: 'none' }}
+                                variant='body2'
+                            >
+                                11 July 2022 - 18 July 2022
+                            </Typography>
+                            <Typography
+                                fontWeight={700}
+                                sx={{ textTransform: 'none', mt: 1 }}
+                                variant='body1'
+                            >
+                                Penelitian Psikologi Terhadap Masyarakat - Translate
+                            </Typography>
+                            <Typography
+                                fontWeight={500}
+                                sx={{ textTransform: 'none' }}
+                                variant='caption'
+                            >
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                            </Typography>
+                            <Box display="flex" justifyContent="space-between" sx={{ mt: 2 }}>
+                                <Box display="flex" columnGap={2} alignItems="center">
+                                    <DialogMyProposal>
+                                        <Button variant="contained" size="small">
+                                            <Typography
+                                                fontWeight={600}
+                                                color="#fff"
+                                                sx={{ textTransform: 'none' }}
+                                                variant='body2'
+                                            >
+                                                Your Envidence
+                                            </Typography>
+                                        </Button>
+                                    </DialogMyProposal>
                                     <Typography
                                         fontWeight={600}
+                                        color="#028ED5"
                                         sx={{ textTransform: 'none' }}
                                         variant='body2'
                                     >
-                                        10.000
+                                        Envidence submitted at  19 July 2022 18:00
                                     </Typography>
-                                    <Chip sx={{ backgroundColor: '#D73930', color: '#fff' }} label="Project Rejected" />
                                 </Box>
-                            </Grid>
-                            <Grid item>
-                                <Box display="flex" columnGap={1} alignItems="center">
-                                    <DeleteOutlineOutlinedIcon />
-                                    <CreateOutlinedIcon />
+                                <Box display="flex" columnGap={2}>
+                                    <Typography
+                                        fontWeight={600}
+                                        color="#028ED5"
+                                        sx={{ textTransform: 'none', mt: 1 }}
+                                        variant='body2'
+                                    >
+                                        2 Attacments
+                                    </Typography>
+                                    <Typography
+                                        fontWeight={600}
+                                        color="#028ED5"
+                                        sx={{ textTransform: 'none', mt: 1 }}
+                                        variant='body2'
+                                    >
+                                        Open Project
+                                    </Typography>
                                 </Box>
-                            </Grid>
-                        </Grid>
-                        <Typography
-                            fontWeight={500}
-                            sx={{ textTransform: 'none' }}
-                            variant='body2'
-                        >
-                            11 July 2022 - 18 July 2022
-                        </Typography>
-                        <Typography
-                            fontWeight={700}
-                            sx={{ textTransform: 'none', mt: 1 }}
-                            variant='body1'
-                        >
-                            Penelitian Psikologi Terhadap Masyarakat - Translate
-                        </Typography>
-                        <Typography
-                            fontWeight={500}
-                            sx={{ textTransform: 'none' }}
-                            variant='caption'
-                        >
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </Typography>
-                        <Box columnGap={2} display="flex" justifyContent="flex-end" sx={{ mt: 2 }}>
-                            <Typography
-                                fontWeight={600}
-                                color="#028ED5"
-                                sx={{ textTransform: 'none', mt: 1 }}
-                                variant='body2'
-                            >
-                                2 Attacments
-                            </Typography>
-                            <Typography
-                                fontWeight={600}
-                                color="#028ED5"
-                                sx={{ textTransform: 'none', mt: 1 }}
-                                variant='body2'
-                            >
-                                Open Project
-                            </Typography>
-                        </Box>
-                    </Paper>
+                            </Box>
+                        </Paper>
+                    )}
                     <Box display="flex" justifyContent="flex-end" sx={{ mt: 2 }}>
                         <Pagination count={1} />
                     </Box>
@@ -406,146 +347,78 @@ const TransactionMemo = () => {
                             </FormControl>
                         </Grid>
                     </Grid>
-                    <Paper
-                        sx={{
-                            p: '24px 16px',
-                            mt: 2,
-                            boxShadow: 'none',
-                            border: '1px solid #E0E0E0',
-                            borderRadius: 1,
-                        }}
-                    >
-                        <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
-                            <Grid item>
-                                <Box display="flex" columnGap={1} alignItems="center">
-                                    <img src='/icons/star.svg' alt="star" />
-                                    <Typography
-                                        fontWeight={600}
-                                        sx={{ textTransform: 'none' }}
-                                        variant='body2'
-                                    >
-                                        10.000
-                                    </Typography>
-                                    <Chip sx={{ backgroundColor: '#76B743BF', color: '#fff' }} label="Work in progress" />
-                                </Box>
+                    {projectList?.map(() =>
+                        <Paper
+                            sx={{
+                                p: '24px 16px',
+                                mt: 2,
+                                boxShadow: 'none',
+                                border: '1px solid #E0E0E0',
+                                borderRadius: 1,
+                            }}
+                        >
+                            <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
+                                <Grid item>
+                                    <Box display="flex" columnGap={1} alignItems="center">
+                                        <img src='/icons/star.svg' alt="star" />
+                                        <Typography
+                                            fontWeight={600}
+                                            sx={{ textTransform: 'none' }}
+                                            variant='body2'
+                                        >
+                                            10.000
+                                        </Typography>
+                                        <Chip sx={{ backgroundColor: '#76B743BF', color: '#fff' }} label="Work in progress" />
+                                    </Box>
+                                </Grid>
+                                <Grid item>
+                                    <Box display="flex" columnGap={1} alignItems="center">
+                                        <DeleteOutlineOutlinedIcon />
+                                        <CreateOutlinedIcon />
+                                    </Box>
+                                </Grid>
                             </Grid>
-                            <Grid item>
-                                <Box display="flex" columnGap={1} alignItems="center">
-                                    <DeleteOutlineOutlinedIcon />
-                                    <CreateOutlinedIcon />
-                                </Box>
-                            </Grid>
-                        </Grid>
-                        <Typography
-                            fontWeight={500}
-                            sx={{ textTransform: 'none' }}
-                            variant='body2'
-                        >
-                            11 July 2022 - 18 July 2022
-                        </Typography>
-                        <Typography
-                            fontWeight={700}
-                            sx={{ textTransform: 'none', mt: 1 }}
-                            variant='body1'
-                        >
-                            Penelitian Psikologi Terhadap Masyarakat - Translate
-                        </Typography>
-                        <Typography
-                            fontWeight={500}
-                            sx={{ textTransform: 'none' }}
-                            variant='caption'
-                        >
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </Typography>
-                        <Box columnGap={2} display="flex" justifyContent="flex-end" sx={{ mt: 2 }}>
                             <Typography
-                                fontWeight={600}
-                                color="#028ED5"
-                                sx={{ textTransform: 'none', mt: 1 }}
+                                fontWeight={500}
+                                sx={{ textTransform: 'none' }}
                                 variant='body2'
                             >
-                                2 Attacments
+                                11 July 2022 - 18 July 2022
                             </Typography>
                             <Typography
-                                fontWeight={600}
-                                color="#028ED5"
+                                fontWeight={700}
                                 sx={{ textTransform: 'none', mt: 1 }}
-                                variant='body2'
+                                variant='body1'
                             >
-                                Open Project
-                            </Typography>
-                        </Box>
-                    </Paper>
-                    <Paper
-                        sx={{
-                            p: '24px 16px',
-                            mt: 2,
-                            boxShadow: 'none',
-                            border: '1px solid #E0E0E0',
-                            borderRadius: 1,
-                        }}
-                    >
-                        <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
-                            <Grid item>
-                                <Box display="flex" columnGap={1} alignItems="center">
-                                    <img src='/icons/star.svg' alt="star" />
-                                    <Typography
-                                        fontWeight={600}
-                                        sx={{ textTransform: 'none' }}
-                                        variant='body2'
-                                    >
-                                        10.000
-                                    </Typography>
-                                    <Chip sx={{ backgroundColor: '#CCCCCC', color: '#fff' }} label="Inactive" />
-                                </Box>
-                            </Grid>
-                            <Grid item>
-                                <Box display="flex" columnGap={1} alignItems="center">
-                                    <DeleteOutlineOutlinedIcon />
-                                    <CreateOutlinedIcon />
-                                </Box>
-                            </Grid>
-                        </Grid>
-                        <Typography
-                            fontWeight={500}
-                            sx={{ textTransform: 'none' }}
-                            variant='body2'
-                        >
-                            11 July 2022 - 18 July 2022
-                        </Typography>
-                        <Typography
-                            fontWeight={700}
-                            sx={{ textTransform: 'none', mt: 1 }}
-                            variant='body1'
-                        >
-                            Penelitian Psikologi Terhadap Masyarakat - Translate
-                        </Typography>
-                        <Typography
-                            fontWeight={500}
-                            sx={{ textTransform: 'none' }}
-                            variant='caption'
-                        >
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </Typography>
-                        <Box columnGap={2} display="flex" justifyContent="flex-end" sx={{ mt: 2 }}>
-                            <Typography
-                                fontWeight={600}
-                                color="#028ED5"
-                                sx={{ textTransform: 'none', mt: 1 }}
-                                variant='body2'
-                            >
-                                2 Attacments
+                                Penelitian Psikologi Terhadap Masyarakat - Translate
                             </Typography>
                             <Typography
-                                fontWeight={600}
-                                color="#028ED5"
-                                sx={{ textTransform: 'none', mt: 1 }}
-                                variant='body2'
+                                fontWeight={500}
+                                sx={{ textTransform: 'none' }}
+                                variant='caption'
                             >
-                                Open Project
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                             </Typography>
-                        </Box>
-                    </Paper>
+                            <Box columnGap={2} display="flex" justifyContent="flex-end" sx={{ mt: 2 }}>
+                                <Typography
+                                    fontWeight={600}
+                                    color="#028ED5"
+                                    sx={{ textTransform: 'none', mt: 1 }}
+                                    variant='body2'
+                                >
+                                    2 Attacments
+                                </Typography>
+                                <Typography
+                                    fontWeight={600}
+                                    color="#028ED5"
+                                    sx={{ textTransform: 'none', mt: 1 }}
+                                    variant='body2'
+                                >
+                                    Open Project
+                                </Typography>
+                            </Box>
+                        </Paper>
+                    )}
                     <Box display="flex" justifyContent="flex-end" sx={{ mt: 2 }}>
                         <Pagination count={1} />
                     </Box>
@@ -595,146 +468,78 @@ const TransactionMemo = () => {
                             </FormControl>
                         </Grid>
                     </Grid>
-                    <Paper
-                        sx={{
-                            p: '24px 16px',
-                            mt: 2,
-                            boxShadow: 'none',
-                            border: '1px solid #E0E0E0',
-                            borderRadius: 1,
-                        }}
-                    >
-                        <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
-                            <Grid item>
-                                <Box display="flex" columnGap={1} alignItems="center">
-                                    <img src='/icons/star.svg' alt="star" />
-                                    <Typography
-                                        fontWeight={600}
-                                        sx={{ textTransform: 'none' }}
-                                        variant='body2'
-                                    >
-                                        10.000
-                                    </Typography>
-                                    <Chip sx={{ backgroundColor: '#028ED5', color: '#fff' }} label="Finished" />
-                                </Box>
+                    {projectList?.map(() =>
+                        <Paper
+                            sx={{
+                                p: '24px 16px',
+                                mt: 2,
+                                boxShadow: 'none',
+                                border: '1px solid #E0E0E0',
+                                borderRadius: 1,
+                            }}
+                        >
+                            <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
+                                <Grid item>
+                                    <Box display="flex" columnGap={1} alignItems="center">
+                                        <img src='/icons/star.svg' alt="star" />
+                                        <Typography
+                                            fontWeight={600}
+                                            sx={{ textTransform: 'none' }}
+                                            variant='body2'
+                                        >
+                                            10.000
+                                        </Typography>
+                                        <Chip sx={{ backgroundColor: '#028ED5', color: '#fff' }} label="Finished" />
+                                    </Box>
+                                </Grid>
+                                <Grid item>
+                                    <Box display="flex" columnGap={1} alignItems="center">
+                                        <DeleteOutlineOutlinedIcon />
+                                        <CreateOutlinedIcon />
+                                    </Box>
+                                </Grid>
                             </Grid>
-                            <Grid item>
-                                <Box display="flex" columnGap={1} alignItems="center">
-                                    <DeleteOutlineOutlinedIcon />
-                                    <CreateOutlinedIcon />
-                                </Box>
-                            </Grid>
-                        </Grid>
-                        <Typography
-                            fontWeight={500}
-                            sx={{ textTransform: 'none' }}
-                            variant='body2'
-                        >
-                            11 July 2022 - 18 July 2022
-                        </Typography>
-                        <Typography
-                            fontWeight={700}
-                            sx={{ textTransform: 'none', mt: 1 }}
-                            variant='body1'
-                        >
-                            Penelitian Psikologi Terhadap Masyarakat - Translate
-                        </Typography>
-                        <Typography
-                            fontWeight={500}
-                            sx={{ textTransform: 'none' }}
-                            variant='caption'
-                        >
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </Typography>
-                        <Box columnGap={2} display="flex" justifyContent="flex-end" sx={{ mt: 2 }}>
                             <Typography
-                                fontWeight={600}
-                                color="#028ED5"
-                                sx={{ textTransform: 'none', mt: 1 }}
+                                fontWeight={500}
+                                sx={{ textTransform: 'none' }}
                                 variant='body2'
                             >
-                                2 Attacments
+                                11 July 2022 - 18 July 2022
                             </Typography>
                             <Typography
-                                fontWeight={600}
-                                color="#028ED5"
+                                fontWeight={700}
                                 sx={{ textTransform: 'none', mt: 1 }}
-                                variant='body2'
+                                variant='body1'
                             >
-                                Open Project
-                            </Typography>
-                        </Box>
-                    </Paper>
-                    <Paper
-                        sx={{
-                            p: '24px 16px',
-                            mt: 2,
-                            boxShadow: 'none',
-                            border: '1px solid #E0E0E0',
-                            borderRadius: 1,
-                        }}
-                    >
-                        <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
-                            <Grid item>
-                                <Box display="flex" columnGap={1} alignItems="center">
-                                    <img src='/icons/star.svg' alt="star" />
-                                    <Typography
-                                        fontWeight={600}
-                                        sx={{ textTransform: 'none' }}
-                                        variant='body2'
-                                    >
-                                        10.000
-                                    </Typography>
-                                    <Chip sx={{ backgroundColor: '#D73930', color: '#fff' }} label="Closed by admin" />
-                                </Box>
-                            </Grid>
-                            <Grid item>
-                                <Box display="flex" columnGap={1} alignItems="center">
-                                    <DeleteOutlineOutlinedIcon />
-                                    <CreateOutlinedIcon />
-                                </Box>
-                            </Grid>
-                        </Grid>
-                        <Typography
-                            fontWeight={500}
-                            sx={{ textTransform: 'none' }}
-                            variant='body2'
-                        >
-                            11 July 2022 - 18 July 2022
-                        </Typography>
-                        <Typography
-                            fontWeight={700}
-                            sx={{ textTransform: 'none', mt: 1 }}
-                            variant='body1'
-                        >
-                            Penelitian Psikologi Terhadap Masyarakat - Translate
-                        </Typography>
-                        <Typography
-                            fontWeight={500}
-                            sx={{ textTransform: 'none' }}
-                            variant='caption'
-                        >
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </Typography>
-                        <Box columnGap={2} display="flex" justifyContent="flex-end" sx={{ mt: 2 }}>
-                            <Typography
-                                fontWeight={600}
-                                color="#028ED5"
-                                sx={{ textTransform: 'none', mt: 1 }}
-                                variant='body2'
-                            >
-                                2 Attacments
+                                Penelitian Psikologi Terhadap Masyarakat - Translate
                             </Typography>
                             <Typography
-                                fontWeight={600}
-                                color="#028ED5"
-                                sx={{ textTransform: 'none', mt: 1 }}
-                                variant='body2'
+                                fontWeight={500}
+                                sx={{ textTransform: 'none' }}
+                                variant='caption'
                             >
-                                Open Project
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                             </Typography>
-                        </Box>
-                    </Paper>
+                            <Box columnGap={2} display="flex" justifyContent="flex-end" sx={{ mt: 2 }}>
+                                <Typography
+                                    fontWeight={600}
+                                    color="#028ED5"
+                                    sx={{ textTransform: 'none', mt: 1 }}
+                                    variant='body2'
+                                >
+                                    2 Attacments
+                                </Typography>
+                                <Typography
+                                    fontWeight={600}
+                                    color="#028ED5"
+                                    sx={{ textTransform: 'none', mt: 1 }}
+                                    variant='body2'
+                                >
+                                    Open Project
+                                </Typography>
+                            </Box>
+                        </Paper>
+                    )}
                     <Box display="flex" justifyContent="flex-end" sx={{ mt: 2 }}>
                         <Pagination count={1} />
                     </Box>

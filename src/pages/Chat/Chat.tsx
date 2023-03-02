@@ -1,6 +1,6 @@
 import {
-    Avatar, ChatContainer, Conversation, ConversationHeader, ConversationList, InfoButton, MainContainer, Message,
-    MessageInput, MessageList, Sidebar
+    Avatar, ChatContainer, ConversationHeader, InfoButton, MainContainer, Message,
+    MessageInput, MessageList
 } from "@chatscope/chat-ui-kit-react";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
@@ -56,10 +56,10 @@ const ChatMemo = () => {
                         <ChatContainer>
                             <ConversationHeader>
                                 <ConversationHeader.Back />
-                                <Avatar src={avatarIco} name="Zoe" />
+                                <Avatar src={messageList?.returnValue?.length > 0 && messageList?.returnValue[0]?.targetPhoto} name="Zoe" />
                                 <ConversationHeader.Content
-                                    userName={messageList?.returnValue[0]?.targetFullName}
-                                    info={messageList?.returnValue[0]?.targetUsername}
+                                    userName={messageList?.returnValue?.length > 0 && messageList?.returnValue[0]?.targetFullName}
+                                    info={messageList?.returnValue?.length > 0 && messageList?.returnValue[0]?.targetUsername}
                                 />
                                 <ConversationHeader.Actions>
                                     <InfoButton />
@@ -80,7 +80,9 @@ const ChatMemo = () => {
                                             position: "single"
                                         }}
                                         avatarSpacer
-                                    />
+                                    >
+                                        <Avatar src={`https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg`} name={message.senderUsername} />
+                                    </Message>
                                 )}
 
                             </MessageList>

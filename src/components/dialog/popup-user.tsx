@@ -73,7 +73,7 @@ const PopupUserMemo: FC<PopupUserProps> = (props) => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem sx={{ display: 'flex', gap: 1, flexDirection: 'row'}}>
+                <MenuItem onClick={() => navigate('/user')} sx={{ display: 'flex', gap: 1, flexDirection: 'row'}}>
                     <AddUserBold /> Profile
                 </MenuItem>
                 <MenuItem onClick={() => setIsOpen(true)} sx={{ display: 'flex', gap: 1, flexDirection: 'row'}}>

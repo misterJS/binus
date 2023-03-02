@@ -10,12 +10,34 @@ import { useProfile } from '../Profile.utils';
 const EditProfileMemo = () => {
     const [files, setFiles] = useState<any>([])
     const { getProfilesData, profile, editProfile } = useProfile();
+    const editSchema = yup.object().shape({
+        // email: yup.string().email().required()
+    })
+    const { handleSubmit, getValues, trigger, setValue, control, formState: { errors } } = useForm({
+        resolver: yupResolver(editSchema),
+        defaultValues: {
+            email: profile?.profile?.returnValue[0]?.email,
+            username: profile?.profile?.returnValue[0]?.username,
+            companyName: profile?.profile?.returnValue[0]?.companyName,
+            major: profile?.profile?.returnValue[0]?.major,
+            yearClass: profile?.profile?.returnValue[0]?.yearClass,
+            nim: profile?.profile?.returnValue[0]?.Nim,
+            memberSince: null,
+            fullname: profile?.profile?.returnValue[0]?.FullName,
+            phoneNo: profile?.profile?.returnValue[0]?.PhoneNo,
+            bio: profile?.profile?.returnValue[0]?.Bio,
+            file: null
+        }
+    })
     const { getRootProps, getInputProps, open } = useDropzone({
         noClick: true,
         onDrop: acceptedFiles => {
-            setFiles(acceptedFiles.map(file => Object.assign(file, {
-                preview: URL.createObjectURL(file)
-            })));
+            setFiles(acceptedFiles.map(file => {
+                Object.assign(file, {
+                    preview: URL.createObjectURL(file)
+                })
+            }
+            ));
         }
     })
     useEffect(() => {
@@ -23,12 +45,6 @@ const EditProfileMemo = () => {
             getProfilesData()
         }
     }, [profile.profile])
-
-    const editSchema = yup.object().shape({
-        email: yup.string().email().required()
-    })
-
-    const { handleSubmit, getValues, trigger, setValue, control, formState: { errors } } = useForm({ resolver: yupResolver(editSchema) })
 
 
     return (
@@ -99,6 +115,8 @@ const EditProfileMemo = () => {
                                                 <TextField
                                                     {...field}
                                                     type="text"
+                                                    disabled
+                                                    sx={{ backgroundColor: '#cccbc8' }}
                                                     placeholder=''
                                                     size="small"
                                                     fullWidth
@@ -124,6 +142,8 @@ const EditProfileMemo = () => {
                                                 <TextField
                                                     {...field}
                                                     type="text"
+                                                    disabled
+                                                    sx={{ backgroundColor: '#cccbc8' }}
                                                     placeholder=''
                                                     size="small"
                                                     fullWidth
@@ -149,6 +169,8 @@ const EditProfileMemo = () => {
                                                 <TextField
                                                     {...field}
                                                     type="text"
+                                                    disabled
+                                                    sx={{ backgroundColor: '#cccbc8' }}
                                                     placeholder=''
                                                     size="small"
                                                     fullWidth
@@ -174,6 +196,8 @@ const EditProfileMemo = () => {
                                                 <TextField
                                                     {...field}
                                                     type="text"
+                                                    disabled
+                                                    sx={{ backgroundColor: '#cccbc8' }}
                                                     placeholder=''
                                                     size="small"
                                                     fullWidth
@@ -199,6 +223,8 @@ const EditProfileMemo = () => {
                                                 <TextField
                                                     {...field}
                                                     type="text"
+                                                    disabled
+                                                    sx={{ backgroundColor: '#cccbc8' }}
                                                     placeholder=''
                                                     size="small"
                                                     fullWidth
@@ -224,6 +250,8 @@ const EditProfileMemo = () => {
                                                 <TextField
                                                     {...field}
                                                     type="text"
+                                                    disabled
+                                                    sx={{ backgroundColor: '#cccbc8' }}
                                                     placeholder=''
                                                     size="small"
                                                     fullWidth
@@ -299,6 +327,7 @@ const EditProfileMemo = () => {
                                         {...field}
                                         type="text"
                                         placeholder='Bio'
+                                        defaultValue={profile?.profile?.returnValue[0]?.bio}
                                         size="small"
                                         multiline
                                         rows={6}

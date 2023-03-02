@@ -22,6 +22,7 @@ import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import { Content } from "../../components";
 import { useProfile } from "./Profile.utils";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 function createData(
     name: string,
@@ -230,7 +231,7 @@ const ProfileMemo = () => {
                                 sx={{ textTransform: 'none' }}
                                 variant='body2'
                             >
-                                : {profile?.profile?.returnValue[0]?.memberSince}
+                                : {moment(profile?.profile?.returnValue[0]?.memberSince).format("DD-MM-YYYY")}
                             </Typography>
                         </Box>
                     </Grid>
@@ -239,7 +240,7 @@ const ProfileMemo = () => {
                     Bio:
                 </Typography>
                 <Typography variant='subtitle2' color={'#5E5873'}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    {profile?.profile?.returnValue[0]?.bio}
                 </Typography>
             </Paper>
 
@@ -283,7 +284,7 @@ const ProfileMemo = () => {
                             <Box display="flex" justifyContent="space-between">
                                 <Box>
                                     <Typography variant='h4' color={'#5E5873'} fontWeight={700}>
-                                        123
+                                        {profile?.contributionJourney?.returnValue[0]?.missionComplete || 0}
                                     </Typography>
                                     <Typography variant='subtitle2' color={'#5E5873'}>
                                         Completion Mission
@@ -306,7 +307,7 @@ const ProfileMemo = () => {
                             <Box display="flex" justifyContent="space-between">
                                 <Box>
                                     <Typography variant='h4' color={'#5E5873'} fontWeight={700}>
-                                        423
+                                        {profile?.contributionJourney?.returnValue[0]?.allMission || 0}
                                     </Typography>
                                     <Typography variant='subtitle2' color={'#5E5873'}>
                                         Apply Mission
@@ -329,7 +330,7 @@ const ProfileMemo = () => {
                             <Box display="flex" justifyContent="space-between">
                                 <Box>
                                     <Typography variant='h4' color={'#5E5873'} fontWeight={700}>
-                                        736
+                                        {profile?.contributionJourney?.returnValue[0]?.jobPosting || 0}
                                     </Typography>
                                     <Typography variant='subtitle2' color={'#5E5873'}>
                                         Job Post
@@ -369,34 +370,36 @@ const ProfileMemo = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <TableRow
-                                    key={row.name}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        <Grid container justifyContent={'space-between'}>
-                                            <Grid item xs={10}>
-                                                <Typography variant='body2' color={'#5E5873'} fontWeight={700}>
-                                                    {row.name}
-                                                </Typography>
-                                                <Typography sx={{ my: 1 }}>
-                                                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
-                                                </Typography>
-                                                <Box display={'flex'} gap={1} alignItems={'start'}>
-                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1665 8.00033C14.1665 11.4063 11.4059 14.167 7.99986 14.167C4.59386 14.167 1.83319 11.4063 1.83319 8.00033C1.83319 4.59433 4.59386 1.83366 7.99986 1.83366C11.4059 1.83366 14.1665 4.59433 14.1665 8.00033Z" stroke="#5E5873" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                        <path d="M10.2876 9.96193L7.77423 8.4626V5.23126" stroke="#5E5873" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                    </svg>
-                                                    <Typography variant='caption'>
-                                                        30 Jun 2022
+                            {profile?.listJobPost?.returnValue?.length === 0 ?
+                                <Typography sx={{ textAlign: 'center' }}>no data available</Typography>
+                                : profile?.listJobPost?.returnValue?.map((row: any) => (
+                                    <TableRow
+                                        key={row.name}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell component="th" scope="row">
+                                            <Grid container justifyContent={'space-between'}>
+                                                <Grid item xs={10}>
+                                                    <Typography variant='body2' color={'#5E5873'} fontWeight={700}>
+                                                        {row.name}
                                                     </Typography>
-                                                </Box>
+                                                    <Typography sx={{ my: 1 }}>
+                                                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+                                                    </Typography>
+                                                    <Box display={'flex'} gap={1} alignItems={'start'}>
+                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1665 8.00033C14.1665 11.4063 11.4059 14.167 7.99986 14.167C4.59386 14.167 1.83319 11.4063 1.83319 8.00033C1.83319 4.59433 4.59386 1.83366 7.99986 1.83366C11.4059 1.83366 14.1665 4.59433 14.1665 8.00033Z" stroke="#5E5873" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path d="M10.2876 9.96193L7.77423 8.4626V5.23126" stroke="#5E5873" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
+                                                        <Typography variant='caption'>
+                                                            30 Jun 2022
+                                                        </Typography>
+                                                    </Box>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -426,34 +429,36 @@ const ProfileMemo = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <TableRow
-                                    key={row.name}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        <Grid container justifyContent={'space-between'}>
-                                            <Grid item xs={10}>
-                                                <Typography variant='body2' color={'#5E5873'} fontWeight={700}>
-                                                    {row.name}
-                                                </Typography>
-                                                <Typography sx={{ my: 1 }}>
-                                                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
-                                                </Typography>
-                                                <Box display={'flex'} gap={1} alignItems={'start'}>
-                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1665 8.00033C14.1665 11.4063 11.4059 14.167 7.99986 14.167C4.59386 14.167 1.83319 11.4063 1.83319 8.00033C1.83319 4.59433 4.59386 1.83366 7.99986 1.83366C11.4059 1.83366 14.1665 4.59433 14.1665 8.00033Z" stroke="#5E5873" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                        <path d="M10.2876 9.96193L7.77423 8.4626V5.23126" stroke="#5E5873" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                    </svg>
-                                                    <Typography variant='caption'>
-                                                        30 Jun 2022
+                            {profile?.listMission?.returnValue?.length === 0 ?
+                                <Typography sx={{ textAlign: 'center', mb: '50px' }}>no data available</Typography>
+                                : profile?.listMission?.returnValue?.map((row: any) => (
+                                    <TableRow
+                                        key={row.name}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell component="th" scope="row">
+                                            <Grid container justifyContent={'space-between'}>
+                                                <Grid item xs={10}>
+                                                    <Typography variant='body2' color={'#5E5873'} fontWeight={700}>
+                                                        {row.name}
                                                     </Typography>
-                                                </Box>
+                                                    <Typography sx={{ my: 1 }}>
+                                                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+                                                    </Typography>
+                                                    <Box display={'flex'} gap={1} alignItems={'start'}>
+                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1665 8.00033C14.1665 11.4063 11.4059 14.167 7.99986 14.167C4.59386 14.167 1.83319 11.4063 1.83319 8.00033C1.83319 4.59433 4.59386 1.83366 7.99986 1.83366C11.4059 1.83366 14.1665 4.59433 14.1665 8.00033Z" stroke="#5E5873" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path d="M10.2876 9.96193L7.77423 8.4626V5.23126" stroke="#5E5873" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
+                                                        <Typography variant='caption'>
+                                                            30 Jun 2022
+                                                        </Typography>
+                                                    </Box>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                         </TableBody>
                     </Table>
                 </TableContainer>

@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
 import { getMessage, getMessageList, postMessage } from "../../redux/goBuzz"
 
 export const useChatSetup = () => {
@@ -13,11 +12,11 @@ export const useChatSetup = () => {
 
 
     useEffect(() => {
-        if (loading) {
+        if (!messagesLists) {
             dispatch(getMessage())
             dispatch(getMessageList())
         }
-    }, [loading])
+    }, [messagesLists])
 
     const postMessageParam = (message: any) => {
         dispatch(postMessage({ message: message }))
