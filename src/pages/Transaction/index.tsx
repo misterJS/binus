@@ -1,23 +1,12 @@
-import React, { memo } from "react"
-import { Content } from "../../components";
+import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import {
-    Paper,
-    Grid,
-    Typography,
     Box,
     Button,
-    ButtonGroup,
-    Tabs,
-    Tab,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    Chip,
-    Pagination
+    ButtonGroup, Chip, FormControl, Grid, InputLabel, MenuItem, Pagination, Paper, Select, Tab, Tabs, Typography
 } from "@mui/material";
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import React, { memo } from "react";
+import { Content } from "../../components";
 import { DialogMyProposal } from "../../components/dialog/dialog-my-proposal";
 import { useTransaction } from "./transaction.util";
 

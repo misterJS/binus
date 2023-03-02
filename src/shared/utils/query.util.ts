@@ -5,6 +5,10 @@ export const useQueryParams = () => {
 
   const slug = get("slug");
   const tab = get("tab");
+  const category = get("category");
+  const maxPoint = get("maxPoint");
+  const minPoint = get("minPoint");
+  const sortBy = get("sortBy");
   const perPage = get("perPage");
   const keyword = get("keyword");
   const startDate = get("startDate");
@@ -20,6 +24,10 @@ export const useQueryParams = () => {
     set,
     get,
     perPage,
+    sortBy,
+    category,
+    maxPoint,
+    minPoint,
     keyword,
     tab,
     slug,

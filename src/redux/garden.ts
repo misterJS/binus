@@ -6,10 +6,10 @@ import { BASE_URL } from '../utils'
 
 export const getProjectList = createAsyncThunk('garden/getProjectList', async (payload: any) => {
   const params = JSON.stringify({
-    "Category": "1",
-    "MinPoint": 0,
-    "MaxPoint": 100,
-    "SortBy": "News",
+    "Category": payload.category,
+    "MinPoint": Number(payload.minPoint),
+    "MaxPoint": Number(payload.maxPoint),
+    "SortBy": payload.sortBy,
     "UserIn": "yusdion3007@gmail.com"
   });
   const response = await axios.post(`${BASE_URL}Garden/GetProject?size=10&page=1`, params, {

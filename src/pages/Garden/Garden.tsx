@@ -43,7 +43,7 @@ function valuetext(value: number) {
 }
 
 function Garden() {
-    const { getProjectsList, garden } = useGardenSetup()
+    const { getProjectsList, set, garden } = useGardenSetup()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -97,7 +97,7 @@ function Garden() {
                             <Box marginLeft={'-10px'} marginBottom={2}>
                                 {['Questionnare', 'Paraphrasing', 'Translation', 'Proofread/Editing'].map((item) =>
                                     <Box key={item} display={'flex'} gap={0.1} alignItems={'center'}>
-                                        <Checkbox />
+                                        <Checkbox onClick={() => set("category", item)} />
                                         <Typography variant='body2'>
                                             {item}
                                         </Typography>
@@ -116,6 +116,7 @@ function Garden() {
                                             {...field}
                                             sx={{ marginBottom: 2 }}
                                             placeholder='Min. Point'
+                                            onBlur={(e) => set("minPoint", e.target.value)}
                                             type="text"
                                             size="small"
                                             fullWidth
@@ -130,6 +131,7 @@ function Garden() {
                                             {...field}
                                             placeholder='Max. Point'
                                             type="text"
+                                            onBlur={(e) => set("maxPoint", e.target.value)}
                                             size="small"
                                             fullWidth
                                         />
@@ -145,17 +147,19 @@ function Garden() {
                                     labelId="relevance-label"
                                     placeholder='Relevance'
                                     fullWidth
+                                    onChange={(e) => set("sortBy", String(e.target.value))}
                                     label="Relevance"
                                 >
                                     <MenuItem value="">
                                         <em>None</em>
                                     </MenuItem>
-                                    <MenuItem value={10}>Relevance</MenuItem>
+                                    <MenuItem value={'Latest'}>Relevance</MenuItem>
                                 </Select>
                             </FormControl>
                             <Button
                                 color="primary"
                                 variant="contained"
+                                onClick={getProjectsList}
                                 fullWidth
                             >
                                 <Typography fontWeight={600} sx={{ textTransform: 'capitalize' }} variant='body1' color={'#fff'}>
