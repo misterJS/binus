@@ -87,6 +87,8 @@ const TransactionMemo = () => {
                 </Grid>
 
                 <ButtonGroup sx={{ my: 2 }} variant="outlined" aria-label="outlined button group">
+                    {/* 
+                    // @ts-ignore */}
                     <Button sx={slug === 'client' && { backgroundColor: '#028ED5', color: '#FFF' }} onClick={getProjectByClient}>
                         <Typography
                             sx={{ textTransform: 'none', fontWeight: 500 }}
@@ -95,6 +97,8 @@ const TransactionMemo = () => {
                             As Client
                         </Typography>
                     </Button>
+                    {/* 
+                    // @ts-ignore */}
                     <Button sx={slug === 'worker' && { backgroundColor: '#028ED5', color: '#FFF' }} onClick={getProjectByWorker}>
                         <Typography
                             sx={{ textTransform: 'none', fontWeight: 500 }}

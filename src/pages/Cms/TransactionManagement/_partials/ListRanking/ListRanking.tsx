@@ -187,8 +187,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     );
 }
 
-const ListRankingMemo = () =>  {
-    const [{transactionManagementList}, {}] = useTransactionManagement();
+const ListRankingMemo = () => {
+    const { transactionManagementList } = useTransactionManagement();
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof Data>('username');
     const [selected, setSelected] = useState<readonly string[]>([]);

@@ -86,6 +86,8 @@ const ChatMemo = () => {
                                 )}
 
                             </MessageList>
+                            {/* 
+                              // @ts-ignore */}
                             <div as="MessageInput" style={{ display: "flex", alignItems: "center", flexDirection: "row", width: '100%' }}>
                                 <MessageInput
                                     placeholder="Type message here"

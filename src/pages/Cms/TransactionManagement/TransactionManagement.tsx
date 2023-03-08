@@ -39,17 +39,17 @@ function a11yProps(index: number) {
 }
 
 const TransactionManagementMemo = () => {
-    const [{ }, { set }] = useTransactionManagement();
+    const { setParams } = useTransactionManagement();
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
         if (newValue === 0) {
-            set("tab", "approval")
+            setParams("tab", "approval")
         } else if (newValue === 1) {
-            set("tab", "active")
+            setParams("tab", "active")
         } else {
-            set("tab", "closed")
+            setParams("tab", "closed")
         }
     };
     return (

@@ -8,6 +8,10 @@ export const useTransactionManagement = () => {
     const { set, status, slug, tab } = useQueryParams();
     const transactionManagement = useSelector((state: any) => state.transactionManagement)
 
+    const setParams = (key: string, value: string) => {
+        set(key, value)
+    }
+
     useEffect(() => {
         if (transactionManagement.resultCode !== 200 && tab === 'active') {
             dispatch(getRejectTransaction({ userIn: 'yusdion3007@gmail.com', id: slug }))
@@ -18,5 +22,8 @@ export const useTransactionManagement = () => {
         }
     }, [transactionManagement.transactions, status])
 
-    return [{ transactionManagementList: transactionManagement.transactions }, { set }]
+    return {
+        transactionManagementList: transactionManagement.transactions,
+        setParams
+    }
 }
