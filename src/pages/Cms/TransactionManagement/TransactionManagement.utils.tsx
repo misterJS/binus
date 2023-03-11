@@ -6,24 +6,24 @@ import { useQueryParams } from "../../../shared";
 export const useTransactionManagement = () => {
     const dispatch = useDispatch()
     const { set, status, slug, tab } = useQueryParams();
-    const transactionManagement = useSelector((state: any) => state.transactionManagement)
+    const transactions = useSelector((state: any) => state.client.transactionManagement.transactions)
+    const resultCode = useSelector((state: any) => state.client.transactionManagement.resultCode);
 
     const setParams = (key: string, value: string) => {
         set(key, value)
     }
 
     useEffect(() => {
-        if (transactionManagement.resultCode !== 200 && tab === 'active') {
-            dispatch(getRejectTransaction({ userIn: 'yusdion3007@gmail.com', id: slug }))
-        } else if (transactionManagement.resultCode !== 200 && tab === 'approve') {
-            dispatch(getApproveTransaction({ userIn: 'yusdion3007@gmail.com', id: slug }))
-        } else {
-            dispatch(getActiveTransaction({ userIn: 'yusdion3007@gmail.com', status: status }))
-        }
-    }, [transactionManagement.transactions, status])
+        const action = resultCode !== 200
+            ? tab === 'active' ? getRejectTransaction({ userIn: 'yusdion3007@gmail.com', id: slug })
+                : getApproveTransaction({ userIn: 'yusdion3007@gmail.com', id: slug })
+            : getActiveTransaction({ userIn: 'yusdion3007@gmail.com', status: status });
+
+        dispatch(action);
+    }, [transactions, status, tab, resultCode]);
 
     return {
-        transactionManagementList: transactionManagement.transactions,
+        transactionManagementList: transactions,
         setParams
     }
-}
+}  

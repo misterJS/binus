@@ -13,6 +13,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Controller, useForm } from "react-hook-form";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useForgotPasswordSetup } from "./ForgotPassword.utils";
+import { RECAPTCHA_SITEKEY } from "../../../utils";
 
 const ForgotPasswordMemo = () => {
     const { handleForgot } = useForgotPasswordSetup();
@@ -64,9 +65,13 @@ const ForgotPasswordMemo = () => {
                     </FormControl>
 
                     <ReCAPTCHA
-                        sitekey="6Lcsq0EjAAAAAPKftP5UemtDMBNxJ0_3eb9_lN-3"
+                        sitekey={RECAPTCHA_SITEKEY}
                         onChange={onChange}
-                        style={{ width: '100%' }}
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
                     />
 
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>

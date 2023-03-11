@@ -14,6 +14,7 @@ import { Controller, useForm } from "react-hook-form";
 import ReCAPTCHA from "react-google-recaptcha";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
+import { RECAPTCHA_SITEKEY } from "../../../utils";
 
 const RegistrationMemo = () => {
     const { handleRegister } = useRegistrationSetup();
@@ -140,9 +141,13 @@ const RegistrationMemo = () => {
                     </FormControl>
 
                     <ReCAPTCHA
-                        sitekey="6Lcsq0EjAAAAAPKftP5UemtDMBNxJ0_3eb9_lN-3"
+                        sitekey={RECAPTCHA_SITEKEY}
                         onChange={onChange}
-                        style={{ width: '100%' }}
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
                     />
 
                     <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>

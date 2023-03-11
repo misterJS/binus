@@ -1,44 +1,43 @@
-import React, { memo, useEffect } from "react"
-import {
-    Container,
-    Paper,
-    Typography,
-    FormControl,
-    Box,
-    TextField,
-    Button
-} from "@mui/material";
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
 import { useMsal } from "@azure/msal-react";
-import { loginRequest } from "../../../authConfig";
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Box, Button, Container, FormControl, IconButton, InputAdornment, Paper, TextField, Typography } from "@mui/material";
+import { memo, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Controller, useForm } from "react-hook-form";
-import { useLoginSetup } from "./Login.utils";
 import { useNavigate } from "react-router-dom";
+import * as yup from 'yup';
+import { loginRequest } from "../../../authConfig";
+import { RECAPTCHA_SITEKEY } from "../../../utils";
+import { useLoginSetup } from "./Login.utils";
 
-const LoginMemo = () => {
+const loginSchema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup.string().required()
+});
+
+const LoginMemo = memo(() => {
+    const [showPassword, setShowPassword] = useState(false);
     const { instance, accounts } = useMsal();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const { handleLogin, handleLoginSso: handleLoginSsoThunk } = useLoginSetup();
-    const loginSchema = yup.object().shape({
-        email: yup.string().email().required(),
-        password: yup.string().required()
-    })
 
-    const { handleSubmit, getValues, trigger, setValue, control, formState: { errors } } = useForm({ resolver: yupResolver(loginSchema) })
+    const { handleSubmit, getValues, trigger, setValue, control, formState: { errors } } = useForm({
+        resolver: yupResolver(loginSchema)
+    });
 
     const handleLoginSso = (loginType: any) => {
         if (loginType === "popup") {
             instance.loginPopup(loginRequest);
             handleLoginSsoThunk(accounts);
         }
-    }
+    };
 
     const onChange = (value: any) => {
-        trigger('captcha')
+        trigger('captcha');
         setValue('captcha', value);
-    }
+    };
+
     return (
         <Container maxWidth="xs" sx={{ py: 20 }}>
             <Paper sx={{
@@ -57,10 +56,10 @@ const LoginMemo = () => {
                             Beesearch Application
                         </Typography>
                     </Box>
-                    <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
-                        Email
-                    </Typography>
                     <FormControl sx={{ mt: 1, mb: 2 }} size="small" fullWidth>
+                        <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
+                            Email
+                        </Typography>
                         <Controller
                             name='email'
                             control={control}
@@ -75,11 +74,10 @@ const LoginMemo = () => {
                         />
                         {errors.email && <span style={{ fontSize: '14px', color: "red" }}>{String(errors?.email?.message)}</span>}
                     </FormControl>
-
-                    <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
-                        Password
-                    </Typography>
                     <FormControl sx={{ mt: 1, mb: 3 }} size="small" fullWidth>
+                        <Typography variant='body2' color={'#4F4F4F'} fontWeight={500}>
+                            Password
+                        </Typography>
                         <Controller
                             name='password'
                             control={control}
@@ -87,30 +85,35 @@ const LoginMemo = () => {
                                 <TextField
                                     {...field}
                                     placeholder='Password'
-                                    type="password"
+                                    type={showPassword ? 'text' : 'password'}
                                     size="small"
                                     fullWidth
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    edge="end"
+                                                >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }}
                                 />
                             )}
                         />
                         {errors.password && <span style={{ fontSize: '14px', color: "red" }}>{String(errors?.password?.message)}</span>}
                     </FormControl>
                     <ReCAPTCHA
-                        sitekey="6Lcsq0EjAAAAAPKftP5UemtDMBNxJ0_3eb9_lN-3"
+                        sitekey={RECAPTCHA_SITEKEY}
                         onChange={onChange}
-                        style={{ width: '100%' }}
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
                     />
-                    {/* <Typography sx={{ mt: 2 }} variant='body2' color={'#4F4F4F'} fontWeight={500}>
-                    Type the text
-                </Typography> */}
-                    {/* <FormControl sx={{ mt: 1, mb: 3 }} size="small" fullWidth>
-                    <TextField
-                        id="captcha"
-                        size="small"
-                        fullWidth
-                    />
-                </FormControl> */}
-
                     <Typography sx={{ textAlign: "center", my: 2 }}>
                         (Please use Mozila Firefox (version 65.0 at least) browser for the best capability experience,
                         thank you)
@@ -137,12 +140,12 @@ const LoginMemo = () => {
 
                     <Typography sx={{ textAlign: "center", my: 2 }}>
                         Having problem with login? Try to <span style={{ color: "blue", cursor: "pointer" }} onClick={() => navigate('/forgot-password')}>Forgot Password </span>
-                        or <span style={{ color: "blue", cursor: "pointer" }} onClick={() => navigate('/register')}>Register</span> New Account (Non Binusian Only)
+                        or <span style={{ color: "blue", cursor: "pointer" }} onClick={() => navigate('/register')}>Register </span>
                     </Typography>
                 </form>
             </Paper>
         </Container>
     )
-}
+})
 
 export const Login = memo(LoginMemo);

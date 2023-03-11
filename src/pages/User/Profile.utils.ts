@@ -6,7 +6,7 @@ import { editProfile, editProfileDone, getContributionJourney, getListJobPost, g
 export const useProfile = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const profile = useSelector((state: any) => state.profile)
+    const profile = useSelector((state: any) => state.client.profile)
     console.log(profile.editProfile);
 
 

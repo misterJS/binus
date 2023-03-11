@@ -139,7 +139,6 @@ export const handleChangePassword = createAsyncThunk('auth/handleChangePassword'
 export const handleLoginSsoThunk = createAsyncThunk('auth/handleLoginSsoThunk', async (payload: any) => {
   return {
     data: payload
-
   }
 })
 

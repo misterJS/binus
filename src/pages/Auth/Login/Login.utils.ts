@@ -1,31 +1,30 @@
-import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import { handleLoginSsoThunk, handleLoginThunk } from "../../../redux/authentication"
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { handleLoginSsoThunk, handleLoginThunk } from "../../../redux/authentication";
 
 export const useLoginSetup = () => {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const auth = useSelector((state: any) => state.auth)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const auth = useSelector((state: any) => state.client.auth);
 
-    useEffect(() => {
-        if (auth.loginState?.returnValue?.id) {
-            navigate('/')
-        }
-
-    }, [auth.loginState])
-
-
-    const handleLogin = (data: any) => {
-        dispatch(handleLoginThunk(data))
+  useEffect(() => {
+    const { loginState } = auth;
+    if (loginState?.returnValue?.id) {
+      navigate("/");
     }
+  }, [auth.loginState, navigate]);
 
-    const handleLoginSso = (data: any) => {
-        dispatch(handleLoginSsoThunk(data))
-    }
+  const handleLogin = (data: any) => {
+    dispatch(handleLoginThunk(data));
+  };
 
-    return {
-        handleLogin,
-        handleLoginSso
-    }
-}
+  const handleLoginSso = (data: any) => {
+    dispatch(handleLoginSsoThunk(data));
+  };
+
+  return {
+    handleLogin,
+    handleLoginSso,
+  };
+};

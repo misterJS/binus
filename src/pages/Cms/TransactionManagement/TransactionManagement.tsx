@@ -5,32 +5,6 @@ import { Content } from "../../../components";
 import { useTransactionManagement } from "./TransactionManagement.utils";
 import { ListRanking } from "./_partials";
 
-interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ pt: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
-
 function a11yProps(index: number) {
     return {
         id: `simple-tab-${index}`,
@@ -42,16 +16,13 @@ const TransactionManagementMemo = () => {
     const { setParams } = useTransactionManagement();
     const [value, setValue] = useState(0);
 
+    const tabs = ["approval", "active", "closed"];
+
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
-        if (newValue === 0) {
-            setParams("tab", "approval")
-        } else if (newValue === 1) {
-            setParams("tab", "active")
-        } else {
-            setParams("tab", "closed")
-        }
+        setParams("tab", tabs[newValue]);
     };
+
     return (
         <>
             <Content>
@@ -73,39 +44,21 @@ const TransactionManagementMemo = () => {
                             onChange={handleChange}
                             aria-label="basic tabs example"
                         >
-                            <Tab
-                                label={
-                                    <Typography
-                                        sx={{ textTransform: 'none', fontWeight: 700 }}
-                                        variant='body2'
-                                    >
-                                        Approval
-                                    </Typography>
-                                }
-                                {...a11yProps(0)}
-                            />
-                            <Tab
-                                label={
-                                    <Typography
-                                        sx={{ textTransform: 'none', fontWeight: 500 }}
-                                        variant='body2'
-                                    >
-                                        Active
-                                    </Typography>
-                                }
-                                {...a11yProps(1)}
-                            />
-                            <Tab
-                                label={
-                                    <Typography
-                                        sx={{ textTransform: 'none', fontWeight: 500 }}
-                                        variant='body2'
-                                    >
-                                        Closed
-                                    </Typography>
-                                }
-                                {...a11yProps(1)}
-                            />
+                            {[
+                                { label: "Approval", fontWeight: 700, index: 0 },
+                                { label: "Active", fontWeight: 500, index: 1 },
+                                { label: "Closed", fontWeight: 500, index: 2 },
+                            ].map((tab) => (
+                                <Tab
+                                    key={tab.index}
+                                    label={
+                                        <Typography sx={{ textTransform: "none", fontWeight: tab.fontWeight }} variant="body2">
+                                            {tab.label}
+                                        </Typography>
+                                    }
+                                    {...a11yProps(tab.index)}
+                                />
+                            ))}
                         </Tabs>
                     </Box>
                     <ListRanking />

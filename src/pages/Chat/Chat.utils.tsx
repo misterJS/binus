@@ -1,20 +1,21 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { getMessage, getMessageList, postMessage } from "../../redux/goBuzz"
+import { useQueryParams } from '../../shared'
+import { getMessage, getMessageList, postMessage } from "../../store/client"
 
 export const useChatSetup = () => {
     const dispatch = useDispatch()
+    const { page, perPage } = useQueryParams()
     // const navigate = useNavigate()
 
-    const messages = useSelector((state: any) => state.goBuzz.messageByUser)
-    const messagesLists = useSelector((state: any) => state.goBuzz.messageList)
-    const loading = useSelector((state: any) => state.goBuzz.loading)
+    const messages = useSelector((state: any) => state.client.chat.messageByUser)
+    const messagesLists = useSelector((state: any) => state.client.chat.messageList)
+    // const loading = useSelector((state: any) => state.client.chat.loading)
 
 
     useEffect(() => {
         if (!messagesLists) {
-            dispatch(getMessage())
-            dispatch(getMessageList())
+            dispatch(getMessage({ page: page, perPage: perPage }))
         }
     }, [messagesLists])
 

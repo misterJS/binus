@@ -8,7 +8,7 @@ import { handleForgotThunk } from "../../../redux/authentication"
 export const useForgotPasswordSetup = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const auth = useSelector((state: any) => state.auth)
+    const auth = useSelector((state: any) => state.client.auth)
 
     useEffect(() => {
         if (auth.loading === false) {

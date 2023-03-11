@@ -13,7 +13,7 @@ interface PopupUserProps {
 const PopupUserMemo: FC<PopupUserProps> = (props) => {
     const { children } = props
     const navigate = useNavigate()
-    const auth = useSelector((state: any) => state.auth)
+    const auth = useSelector((state: any) => state.client.auth)
 
     useEffect(() => {
         if (auth?.logoutState !== '') {

@@ -47,16 +47,13 @@ const TransactionMemo = () => {
     const [value, setValue] = React.useState(0);
     const { getProjectByWorker, getProjectByClient, set, slug, projectList } = useTransaction();
 
+    const statusList = ["Open Tab", "WorkInProgress Tab", "Closed Tab"];
+
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
-        if (newValue === 0) {
-            set("status", "Open Tab")
-        } else if (newValue === 1) {
-            set("status", "WorkInProgress Tab")
-        } else {
-            set("status", "Closed Tab")
-        }
+        set("status", statusList[newValue]);
     };
+
     return (
         <Content>
             <Paper
@@ -87,23 +84,13 @@ const TransactionMemo = () => {
                 </Grid>
 
                 <ButtonGroup sx={{ my: 2 }} variant="outlined" aria-label="outlined button group">
-                    {/* 
-                    // @ts-ignore */}
-                    <Button sx={slug === 'client' && { backgroundColor: '#028ED5', color: '#FFF' }} onClick={getProjectByClient}>
-                        <Typography
-                            sx={{ textTransform: 'none', fontWeight: 500 }}
-                            variant='body2'
-                        >
+                    <Button sx={{ backgroundColor: slug === 'client' ? '#028ED5' : 'inherit', color: slug === 'client' ? '#FFF' : 'inherit' }} onClick={getProjectByClient}>
+                        <Typography variant='body2' sx={{ fontWeight: 500, textTransform: 'none' }}>
                             As Client
                         </Typography>
                     </Button>
-                    {/* 
-                    // @ts-ignore */}
-                    <Button sx={slug === 'worker' && { backgroundColor: '#028ED5', color: '#FFF' }} onClick={getProjectByWorker}>
-                        <Typography
-                            sx={{ textTransform: 'none', fontWeight: 500 }}
-                            variant='body2'
-                        >
+                    <Button sx={{ backgroundColor: slug === 'worker' ? '#028ED5' : 'inherit', color: slug === 'worker' ? '#FFF' : 'inherit' }} onClick={getProjectByWorker}>
+                        <Typography variant='body2' sx={{ fontWeight: 500, textTransform: 'none' }}>
                             As Worker
                         </Typography>
                     </Button>

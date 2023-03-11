@@ -1,37 +1,32 @@
-import { useCallback, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { getProjectAsClient, getProjectAsWorker } from "../../redux/transaction"
-import { useQueryParams } from "../../shared"
+import { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getProjectAsClient, getProjectAsWorker } from "../../redux/transaction";
+import { useQueryParams } from "../../shared";
 
 export const useTransaction = () => {
-    const dispatch = useDispatch()
-    const { set, slug, status } = useQueryParams();
+  const dispatch = useDispatch();
+  const { set, slug, status } = useQueryParams();
 
-    const transaction = useSelector((state: any) => state.transaction)
+  const transaction = useSelector((state: any) => state.client.transaction);
 
-    useEffect(() => {
-        if (transaction.resultCode !== 200 && slug === 'client') {
-            dispatch(getProjectAsClient({ userIn: 'yusdion3007@gmail.com', status: status }))
-        } else {
-            dispatch(getProjectAsWorker({ userIn: 'yusdion3007@gmail.com', status: status }))
-        }
-    }, [transaction.project, status])
+  useEffect(() => {
+    const payload = { userIn: 'yusdion3007@gmail.com', status };
+    const action = slug === 'client' ? getProjectAsClient(payload) : getProjectAsWorker(payload);
+    if (transaction.resultCode !== 200) dispatch(action);
+  }, [transaction.projectsAsClient, status, slug]);
 
-    const getProjectByWorker = useCallback(() => {
-        set("slug", "worker")
-        dispatch(getProjectAsWorker({ userIn: 'yusdion3007@gmail.com', status: status }))
-    }, [slug, status])
+  const getProjectBy = useCallback((slug: string) => {
+    set("slug", slug);
+    const payload = { status };
+    const action = slug === 'client' ? getProjectAsClient(payload) : getProjectAsWorker(payload);
+    dispatch(action);
+  }, [set, status]);
 
-    const getProjectByClient = useCallback(() => {
-        set("slug", "client")
-        dispatch(getProjectAsClient({ userIn: 'yusdion3007@gmail.com', status: status }))
-    }, [slug, status])
-
-    return {
-        getProjectByWorker,
-        getProjectByClient,
-        set,
-        projectList: transaction.project,
-        slug
-    }
-}
+  return {
+    getProjectByWorker: useCallback(() => getProjectBy('worker'), [getProjectBy]),
+    getProjectByClient: useCallback(() => getProjectBy('client'), [getProjectBy]),
+    set,
+    projectList: transaction.project,
+    slug
+  };
+};
